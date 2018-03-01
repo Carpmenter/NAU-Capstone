@@ -15,6 +15,7 @@ namespace NAUReviewApplication.Models
         public virtual DbSet<SurveyQuestion> SurveyQuestion { get; set; }
         public virtual DbSet<SurveyResponse> SurveyResponse { get; set; }
 
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
