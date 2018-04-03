@@ -53,6 +53,8 @@ namespace NAUReviewApplication.Controllers
             var sq1 = new SurveyQuestion();
             var sq2 = new SurveyQuestion();
 
+            /*** General Process for adding entities with many-to-many relationships ***/
+
             //Survey 1 mapping
             sq1.Survey = testSurvey;
             sq1.Question = q1;
@@ -70,13 +72,27 @@ namespace NAUReviewApplication.Controllers
             context.Survey.Add(testSurvey);
             context.Question.Add(q1);
             context.Question.Add(q2);
+            
+            /*** Included when adding large number of entities is needed ***
+             
+            public async Task SaveEntities(IEnumerable<SurveyQuestion> surveyQuestions)
+            {
+                int i = 0;
+                foreach (var sq in surveyQuestions)
+                {
+                    context.Set<Survey>().Add(SurveyQuestion.Survey);
+                    context.Set<Question>().Add(SurveyQuestion.Question);
+                    context.Set<SurveyQuestion>().Add(sq);
+                    i++;
+                    if (i == 99)
+                    {
+                        await context.SaveChangesAsync();
+                        i = 0;
+                    }
+                }
+                await context.SaveChangesAsync();
+            } *************************************************************/
 
-            //context.SurveyQuestion.Add(new SurveyQuestion { Survey = testSurvey, Question = q1 });
-            //context.SurveyQuestion.Add(new SurveyQuestion { Survey = testSurvey, Question = q2 });
-            //context.SurveyQuestion.Add(new SurveyQuestion { Survey = testSurvey2, Question = q1 });
-            //context.SurveyQuestion.Add(new SurveyQuestion { Survey = testSurvey2, Question = q2 });
-            // context.SurveyQuestion.Add(new SurveyQuestion { Survey = testSurvey2, Question = q3 });
-            //context.SurveyQuestion.Add(new SurveyQuestion { Survey = s, Question = q });
             context.SaveChanges();
 
             return View();
