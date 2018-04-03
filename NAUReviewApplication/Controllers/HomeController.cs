@@ -10,10 +10,23 @@ namespace NAUReviewApplication.Controllers
 {
     public class HomeController : Controller
     {
-        public IActionResult Index()
+        private readonly NAUcountryContext _context;
+
+        public IActionResult Index(string usernm, string passwrd)
         {
-            string a;
-            return View();
+            string username = usernm;
+            string password = passwrd;
+
+            foreach (Admin a in _context.Admin)
+            {
+                if (a.Username == username && a.Password == password)
+                {
+                    
+                    return View();
+                }
+            }
+
+            return RedirectToAction(nameof(Login));
         }
 
         public IActionResult About()
@@ -33,6 +46,13 @@ namespace NAUReviewApplication.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+
+        public IActionResult Login()
+        {
+            
+
+            return View();
         }
     }
 }
