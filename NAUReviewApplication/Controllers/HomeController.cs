@@ -12,6 +12,11 @@ namespace NAUReviewApplication.Controllers
     {
         private readonly NAUcountryContext _context;
 
+        public HomeController(NAUcountryContext context)
+        {
+            _context = context;
+        }
+
         public IActionResult Index(string usernm, string passwrd)
         {
             string username = usernm;
