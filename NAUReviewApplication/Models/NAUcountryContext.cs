@@ -6,14 +6,14 @@ namespace NAUReviewApplication.Models
 {
     public partial class NAUcountryContext : DbContext
     {
-        public virtual DbSet<Admin> Admin { get; set; }
-        public virtual DbSet<Category> Category { get; set; }
-        public virtual DbSet<Group> Group { get; set; }
-        public virtual DbSet<Participant> Participant { get; set; }
-        public virtual DbSet<Question> Question { get; set; }
-        public virtual DbSet<Survey> Survey { get; set; }
-        public virtual DbSet<SurveyQuestion> SurveyQuestion { get; set; }
-        public virtual DbSet<SurveyResponse> SurveyResponse { get; set; }
+        public DbSet<Admin> Admin { get; set; }
+        public DbSet<Category> Category { get; set; }
+        public DbSet<Group> Group { get; set; }
+        public DbSet<Participant> Participant { get; set; }
+        public DbSet<Question> Question { get; set; }
+        public DbSet<Survey> Survey { get; set; }
+        public DbSet<SurveyQuestion> SurveyQuestion { get; set; }
+        public DbSet<SurveyResponse> SurveyResponse { get; set; }
 
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -108,8 +108,7 @@ namespace NAUReviewApplication.Models
                 entity.Property(e => e.Text).IsRequired();
 
                 entity.Property(e => e.Type)
-                    .IsRequired()
-                    .HasMaxLength(10);
+                    .IsRequired();
 
                 entity.HasOne(d => d.Category)
                     .WithMany(p => p.Question)
@@ -135,19 +134,28 @@ namespace NAUReviewApplication.Models
 
             modelBuilder.Entity<SurveyQuestion>(entity =>
             {
-                entity.Property(e => e.Id).HasColumnName("ID");
-
                 entity.Property(e => e.QuestionId).HasColumnName("QuestionID");
 
                 entity.Property(e => e.SurveyId).HasColumnName("SurveyID");
 
+                entity.HasKey(s => new { s.SurveyId, s.QuestionId });
+                /*
                 entity.HasOne(d => d.Question)
-                    .WithMany(p => p.SurveyQuestion)
+                    .WithMany(m => m.SurveyQuestions)
                     .HasForeignKey(d => d.QuestionId);
 
                 entity.HasOne(d => d.Survey)
-                    .WithMany(p => p.SurveyQuestion)
+                    .WithMany(p => p.SurveyQuestions)
                     .HasForeignKey(d => d.SurveyId);
+                */
+                ///*
+                entity.HasOne(d => d.Question)
+                    .WithMany(p => p.SurveyQuestions)
+                    .HasForeignKey(d => d.QuestionId);
+
+                entity.HasOne(d => d.Survey)
+                    .WithMany(p => p.SurveyQuestions)
+                    .HasForeignKey(d => d.SurveyId); //*/
             });
 
             modelBuilder.Entity<SurveyResponse>(entity =>
