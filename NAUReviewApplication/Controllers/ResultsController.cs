@@ -4,12 +4,14 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using NAUReviewApplication.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace NAUReviewApplication.Controllers
 {
     public class ResultsController : Controller
     {
         private NAUcountryContext context;
+        private int surveyID;
 
         public ResultsController(NAUcountryContext context)
         {
@@ -25,21 +27,60 @@ namespace NAUReviewApplication.Controllers
 
         public IActionResult Responses(string id)
         {
-            var intData = Convert.ToInt32(id);
-
             if (id == null)
             {
                 return NotFound();
             }
 
-            var survey = from r in context.SurveyResponse where r.SurveyId.Equals(intData) select r;
-            if (survey == null)
+            surveyID = Convert.ToInt32(id);
+
+            // Get list of questions corresponding to SurveyID 
+            var questions = getQuestionsBySurvey(surveyID);
+
+            if (questions == null)
             {
                 return NotFound();
             }
 
-            return View(survey);
+            return View(questions);
         }
+
+        public IActionResult QuestionResults(string id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            int intID = Convert.ToInt32(id);
+
+            // Get all responses to questionID from surveyID
+            var questionResponses = getQuestionResponses(intID, surveyID);
+
+            if (questionResponses == null)
+            {
+                return NotFound();
+            }
+            
+            return View(questionResponses);
+        }
+
+        public ICollection<Question> getQuestionsBySurvey(int survID)
+        {
+            return context.SurveyQuestion.Include(q => q.Question)
+                .Where(sq => sq.SurveyId == survID)
+                .Select(sq => sq.Question).ToList();
+        }
+
+        public ICollection<SurveyResponse> getQuestionResponses(int questID, int survID)
+        {
+            // Select all responses from question questID in survey survID
+            return context.SurveyResponse
+                .Where(sr => sr.QuestionId == questID)
+                .Where(sr => sr.SurveyId == survID)
+                .ToList();
+        }
+
 
         public IActionResult Create()
         {
@@ -47,14 +88,14 @@ namespace NAUReviewApplication.Controllers
             DateTime today = DateTime.Today;
             var testSurvey = new Survey { Description = "First test Survey Created", CreationDate = sDate };
             var testSurvey2 = new Survey { Description = "General Project Servey", CreationDate = today };
-            var q1 = new Question { Type = 0, Text = "Rate overall experience" };
-            var q2 = new Question { Type = 0, Text = "Rate how 4 C's were used" };
+            var q1 = new Question { Type = 0, Text = "Effectively Mitigated Risks" };
+            var q2 = new Question { Type = 1, Text = "List one thing you can improve on" };
             var q3 = new Question { Type = 0, Text = "Effectively Mitigated Risks" };
             var sq1 = new SurveyQuestion();
             var sq2 = new SurveyQuestion();
 
             /*** General Process for adding entities with many-to-many relationships ***/
-
+            /*
             //Survey 1 mapping
             sq1.Survey = testSurvey;
             sq1.Question = q1;
@@ -69,10 +110,10 @@ namespace NAUReviewApplication.Controllers
             testSurvey.SurveyQuestions.Add(sq1);
             testSurvey.SurveyQuestions.Add(sq2);
             // add to context
-            context.Survey.Add(testSurvey);
+            //context.Survey.Add(testSurvey);
             context.Question.Add(q1);
             context.Question.Add(q2);
-            
+            */
             /*** Included when adding large number of entities is needed ***
              
             public async Task SaveEntities(IEnumerable<SurveyQuestion> surveyQuestions)
@@ -97,5 +138,6 @@ namespace NAUReviewApplication.Controllers
 
             return View();
         }
+
     }
 }

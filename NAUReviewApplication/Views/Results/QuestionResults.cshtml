@@ -1,0 +1,59 @@
+﻿@model ICollection<NAUReviewApplication.Models.SurveyResponse>
+
+@{
+    ViewData["Title"] = "Question Results";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Results</title>
+</head>
+<body>
+    <h2>Question Results</h2>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Survey Id</th>
+                <th>
+                    Question ID
+                </th>
+                <th>
+                    Participant ID
+                </th>
+                <th>
+                    Score
+                </th>
+                <th>
+                    Comment
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.SurveyId)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.QuestionId)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ParticipantId)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Score)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Comment)
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</body>
+</html>

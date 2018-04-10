@@ -1,4 +1,4 @@
-﻿@model NAUReviewApplication.Models.SurveyResponse
+﻿@model ICollection<NAUReviewApplication.Models.Question>
 
 
 @{
@@ -13,5 +13,36 @@
     <title>Responses</title>
 </head>
 <body>
+    <h1>Survey Questions:</h1>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Question</th>
+                <th>
+                    Question Type
+                </th>
+                <th>
+                    Results
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Text)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Type)
+                </td>
+                <td>
+                    <a asp-action="QuestionResults" asp-route-id="@item.QuestionId">Question Results</a>
+                </td>
+            </tr>
+            }
+        </tbody>
+    </table>
 </body>
 </html>

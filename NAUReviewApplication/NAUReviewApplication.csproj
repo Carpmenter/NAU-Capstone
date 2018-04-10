@@ -54,4 +54,8 @@
     <None Include="Views\Groups\Index.cshtml" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Querys\" />
+  </ItemGroup>
+
 </Project>
