@@ -75,10 +75,15 @@ namespace NAUReviewApplication.Controllers
         public ICollection<SurveyResponse> getQuestionResponses(int questID, int survID)
         {
             // Select all responses from question questID in survey survID
+            /* return context.SurveyResponse
+                 .Where(sr => sr.QuestionId == questID)
+                 .Where(sr => sr.SurveyId == survID)
+                 .ToList(); */
             return context.SurveyResponse
-                .Where(sr => sr.QuestionId == questID)
-                .Where(sr => sr.SurveyId == survID)
+                .Where(s => s.SurveyId == 13)
                 .ToList();
+
+
         }
 
 
