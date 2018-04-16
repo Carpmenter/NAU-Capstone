@@ -1,4 +1,4 @@
-﻿@model ICollection<NAUReviewApplication.Models.Question>
+﻿@model Tuple<ICollection<NAUReviewApplication.Models.Question>, int>
 
 
 @{
@@ -13,7 +13,7 @@
     <title>Responses</title>
 </head>
 <body>
-    <h1>Survey Questions:</h1>
+    <h1>Survey @Model.Item2 Questions:</h1>
     <table class="table">
         <thead>
             <tr>
@@ -28,19 +28,25 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var item in Model)
+            @foreach (var item in Model.Item1)
             {
             <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Text)
+                    @item.Text
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Type)
+                    @{  if (item.Type.ToString().Equals("0"))
+                        { @Html.DisplayName("Numeric")}
+                        else
+                        { @Html.DisplayName("Text")}
+                    }
                 </td>
                 <td>
-                    <a asp-action="QuestionResults" asp-route-id="@item.QuestionId">Question Results</a>
-                </td>
-            </tr>
+                    <a asp-action="QuestionResults" asp-route-id="@item.QuestionId"
+                       asp-route-survID="@Model.Item2">Question Results</a>
+                   </td>
+   
+               </tr>
             }
         </tbody>
     </table>
