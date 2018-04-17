@@ -5,13 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Views\Groups\**" />
-    <Content Remove="Views\Groups\**" />
-    <EmbeddedResource Remove="Views\Groups\**" />
-    <None Remove="Views\Groups\**" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Content Remove="Create.cshtml" />
     <Content Remove="Delete.cshtml" />
     <Content Remove="Details.cshtml" />
@@ -21,14 +14,6 @@
 
   <ItemGroup>
     <None Remove="Database.dacpac" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Include="Views\Groups\Create.cshtml" />
-    <Content Include="Views\Groups\Delete.cshtml" />
-    <Content Include="Views\Groups\Details.cshtml" />
-    <Content Include="Views\Groups\Edit.cshtml" />
-    <Content Include="Views\Groups\Index.cshtml" />
   </ItemGroup>
 
   <ItemGroup>
@@ -44,14 +29,6 @@
 
   <ItemGroup>
     <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.0.2" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="Views\Groups\Create.cshtml" />
-    <None Include="Views\Groups\Delete.cshtml" />
-    <None Include="Views\Groups\Details.cshtml" />
-    <None Include="Views\Groups\Edit.cshtml" />
-    <None Include="Views\Groups\Index.cshtml" />
   </ItemGroup>
 
   <ItemGroup>

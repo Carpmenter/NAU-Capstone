@@ -7,8 +7,6 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using NAUReviewApplication.Models;
 
-
-
 namespace NAUReviewApplication.Controllers
 {
     public class GroupsController : Controller
@@ -27,7 +25,7 @@ namespace NAUReviewApplication.Controllers
         }
 
         // GET: Groups/Details/5
-        public async Task<IActionResult> Details(string id)
+        public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
             {
@@ -49,13 +47,13 @@ namespace NAUReviewApplication.Controllers
         {
             return View();
         }
-        //
+
         // POST: Groups/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Description,GroupId")] Group @group)
+        public async Task<IActionResult> Create([Bind("GroupId,Name,Description")] Group @group)
         {
             if (ModelState.IsValid)
             {
@@ -67,7 +65,7 @@ namespace NAUReviewApplication.Controllers
         }
 
         // GET: Groups/Edit/5
-        public async Task<IActionResult> Edit(string id)
+        public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
             {
@@ -87,7 +85,7 @@ namespace NAUReviewApplication.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, [Bind("Description,GroupId")] Group @group)
+        public async Task<IActionResult> Edit(int id, [Bind("GroupId,Name,Description")] Group @group)
         {
             if (id != @group.GroupId)
             {
@@ -118,7 +116,7 @@ namespace NAUReviewApplication.Controllers
         }
 
         // GET: Groups/Delete/5
-        public async Task<IActionResult> Delete(string id)
+        public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
             {
@@ -138,7 +136,7 @@ namespace NAUReviewApplication.Controllers
         // POST: Groups/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(string id)
+        public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var @group = await _context.Group.SingleOrDefaultAsync(m => m.GroupId == id);
             _context.Group.Remove(@group);
@@ -146,7 +144,7 @@ namespace NAUReviewApplication.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        private bool GroupExists(string id)
+        private bool GroupExists(int id)
         {
             return _context.Group.Any(e => e.GroupId == id);
         }

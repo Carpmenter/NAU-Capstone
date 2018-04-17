@@ -11,8 +11,9 @@ namespace NAUReviewApplication.Models
             Question = new HashSet<Question>();
         }
 
+        public int GroupId { get; set; }
+        public string Name { get; set; }
         public string Description { get; set; }
-        public string GroupId { get; set; }
 
         public ICollection<Participant> Participant { get; set; }
         public ICollection<Question> Question { get; set; }

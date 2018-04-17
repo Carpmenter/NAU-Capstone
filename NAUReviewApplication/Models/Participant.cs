@@ -11,7 +11,7 @@ namespace NAUReviewApplication.Models
         }
 
         public int ParticipantId { get; set; }
-        public string GroupId { get; set; }
+        public int GroupId { get; set; }
         public int SurveyId { get; set; }
         public string Username { get; set; }
 

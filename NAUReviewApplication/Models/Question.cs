@@ -12,8 +12,8 @@ namespace NAUReviewApplication.Models
         }
 
         public int QuestionId { get; set; }
-        public string GroupId { get; set; }
-        public string CategoryId { get; set; }
+        public int GroupId { get; set; }
+        public int CategoryId { get; set; }
         public int Type { get; set; }
         public string Text { get; set; }
         public List<SurveyQuestion> SurveyQuestions { get; set; } = new List<SurveyQuestion>();
