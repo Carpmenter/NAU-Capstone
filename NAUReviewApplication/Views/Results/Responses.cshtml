@@ -3,6 +3,9 @@
 
 @{
     ViewData["Title"] = "Survey Responses";
+
+    int length = Model.Item1.Count();
+    List<double> avgs = ViewBag.Averages;
 }
 
 <!DOCTYPE html>
@@ -24,27 +27,32 @@
                 <th>
                     Results
                 </th>
-                <th></th>
+                <th>
+                    Overall Average
+                </th>
             </tr>
         </thead>
         <tbody>
-            @foreach (var item in Model.Item1)
+            @for (int i = 0; i < length; i++)
             {
             <tr>
                 <td>
-                    @item.Text
+                    @Model.Item1.ElementAt(i).Text
                 </td>
                 <td>
-                    @{  if (item.Type.ToString().Equals("0"))
+                    @{  if (Model.Item1.ElementAt(i).Type.ToString().Equals("0"))
                         { @Html.DisplayName("Numeric")}
                         else
                         { @Html.DisplayName("Text")}
                     }
                 </td>
                 <td>
-                    <a asp-action="QuestionResults" asp-route-id="@item.QuestionId"
+                    <a asp-action="QuestionResults" asp-route-id="@Model.Item1.ElementAt(i).QuestionId"
                        asp-route-survID="@Model.Item2">Question Results</a>
-                   </td>
+                </td>
+                <td>
+                    @avgs.ElementAt(i)
+                </td>
    
                </tr>
             }
