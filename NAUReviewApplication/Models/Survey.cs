@@ -12,7 +12,7 @@ namespace NAUReviewApplication.Models
             SurveyResponse = new HashSet<SurveyResponse>();
         }
 
-        public int SurveyId { get; set; }
+        public int ID { get; set; }
         public string Description { get; set; }
         public DateTime CreationDate { get; set; }
         public List<SurveyQuestion> SurveyQuestions { get; set; } = new List<SurveyQuestion>();

@@ -20,6 +20,7 @@ namespace NAUReviewApplication.Models
 
         public Category Category { get; set; }
         public Group Group { get; set; }
+        public SurveyQuestion SurveyQuestion { get; set; }
         //public ICollection<SurveyQuestion> SurveyQuestion { get; set; }
         public ICollection<SurveyResponse> SurveyResponse { get; set; }
     }

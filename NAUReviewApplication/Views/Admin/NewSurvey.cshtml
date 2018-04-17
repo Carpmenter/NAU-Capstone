@@ -1,0 +1,130 @@
+﻿@model IEnumerable<NAUReviewApplication.Models.Question>
+
+@{
+    ViewData["Title"] = "NewSurvey";
+
+    string Question = "";
+    int F_N = 0;
+    int Category = 0;
+    int SurveyID = 0;
+    int count = 0, temp = 0;
+}
+
+@{
+    <!--creates a new linking id for the survey questions to the survey
+    If it has already posted once then the id won't be incremented again-->
+    if (count == 0)
+    {
+        foreach (var item in Model)
+        {
+            if (item.SurveyQuestion.Survey.SurveyId > temp)
+            {
+                temp = item.SurveyQuestion.Survey.SurveyId;
+            }
+        }
+
+        temp++;
+    }
+}
+
+<h2>NewSurvey</h2>
+
+<form method="POST">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    Question
+                </th>
+                <th>
+                    Category
+                </th>
+                <th>
+                    Free text/Number Scale
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                foreach (var item in Model)
+                {
+                    @if (item.SurveyQuestion.Survey.SurveyId == SurveyID)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.ID)
+                            </td>
+                            <td>
+                                @{
+                                    if (item.Category.CategoryId.ToString().Equals("0"))
+                                        {@Html.DisplayName("Communication")}
+                                    if (item.Category.CategoryId.ToString().Equals("1"))
+                                        {@Html.DisplayName("Collaboration")}
+                                    if (item.Category.CategoryId.ToString().Equals("2"))
+                                        {@Html.DisplayName("Critical Thinking")}
+                                    if (item.Category.CategoryId.ToString().Equals("3"))
+                                        {@Html.DisplayName("Creativity")}
+                                }
+                            </td>
+                            <td>
+                                @{
+                                    if (item.Type.ToString().Equals("0"))
+                                        {@Html.DisplayName("Free Text")}
+                                    else
+                                        {@Html.DisplayName("Number Scale")}
+                                }
+                            </td>
+                        </tr>
+                    }
+                    else
+                    { }
+                }
+            }
+        </tbody>
+    </table>
+
+    <table style="width:100%;">
+        <tr>
+            <td>&nbsp;</td>
+        </tr>
+        <tr align="Center">
+            <td>Please enter your question:<br /><input type="text" asp-for="@Question" /></td>
+        </tr>
+        <tr>
+            <td>&nbsp;</td>
+        </tr>
+        <tr align="center">
+            <td class="radio">
+                <label><input asp-for="@F_N" type="radio" value="0" />Free Text</label>
+                &nbsp;
+                <label><input asp-for="@F_N" type="radio" value="1" />Number Scale</label>
+            </td>
+        </tr>
+        <tr>
+            <td>&nbsp;</td>
+        </tr>
+        <tr align="center">
+            <td class="radio">
+                <label><input asp-for="@Category" type="radio" value="0" />Communication</label>
+                &nbsp;
+                <label><input asp-for="@Category" type="radio" value="1" />Collaberation</label>
+                &nbsp;
+                <label><input asp-for="@Category" type="radio" value="2" />Critical Thinking</label>
+                &nbsp;
+                <label><input asp-for="@Category" type="radio" value="3" />Creativity</label>
+            </td>
+        </tr>
+        <tr>
+            <td>&nbsp;</td>
+        </tr>
+        <tr align="center">
+            <td>
+                <input type="submit" value="Add A Question"
+                       asp-area="" asp-controller="Admin" asp-action="AddQuestion" />
+                &nbsp;
+                <input type="submit" value="Save Survey"
+                       asp-area="" asp-controller="Admin" asp-action="SavePage" />
+            </td>
+        </tr>
+    </table>
+</form>

@@ -92,7 +92,7 @@ namespace NAUReviewApplication.Models
 
             modelBuilder.Entity<Question>(entity =>
             {
-                entity.Property(e => e.QuestionId).HasColumnName("QuestionID");
+                entity.Property(e => e.QuestionId).HasColumnName("ID");
 
                 entity.Property(e => e.CategoryId)
                     .HasColumnName("CategoryID")
@@ -122,7 +122,7 @@ namespace NAUReviewApplication.Models
 
             modelBuilder.Entity<Survey>(entity =>
             {
-                entity.Property(e => e.SurveyId).HasColumnName("SurveyID");
+                entity.Property(e => e.ID).HasColumnName("ID");
 
                 entity.Property(e => e.CreationDate)
                     .HasColumnName("creationDate")
