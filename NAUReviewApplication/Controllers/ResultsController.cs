@@ -65,15 +65,26 @@ namespace NAUReviewApplication.Controllers
             }
 
             int intID = Convert.ToInt32(id);
+            List<string> usernames = new List<string>();
 
             // Get all responses to questionID from surveyID
             var questionResponses = getQuestionResponses(intID, survID);
-
+            var questions = context.Question.Single(q => q.QuestionId == intID);
+            
             if (questionResponses == null)
             {
                 return NotFound();
             }
-            
+
+            foreach(var u in questionResponses)
+            {
+                var temp = u.ParticipantId;
+                usernames.Add((context.Participant.Single(p => p.ParticipantId == temp).Username));
+            }
+
+            ViewBag.Question = questions.Text;
+            ViewBag.Usernames = usernames;
+
             return View(questionResponses);
         }
 

@@ -2,6 +2,8 @@
 
 @{
     ViewData["Title"] = "Question Results";
+    List<string> users = new List<string>();
+    users = ViewBag.Usernames;
 }
 
 <!DOCTYPE html>
@@ -16,41 +18,50 @@
     <table class="table">
         <thead>
             <tr>
-                <th>Survey Id</th>
                 <th>
-                    Question ID
+                    Question
                 </th>
                 <th>
                     Participant ID
                 </th>
-                <th>
-                    Score
-                </th>
-                <th>
-                    Comment
-                </th>
+                @if (Model.ElementAt(0).Score.ToString().Equals("-1"))
+                {
+                    <th>
+                        Comment
+                    </th>
+                }
+                else
+                {
+                    <th>
+                        Score
+                    </th>
+                }
                 <th></th>
             </tr>
         </thead>
         <tbody>
-            @foreach (var item in Model)
+            @for (int i=0; i< Model.Count(); i++)
             {
                 <tr>
                     <td>
-                        @Html.DisplayFor(modelItem => item.SurveyId)
+                        @ViewBag.Question
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.QuestionId)
+                        @users.ElementAt(i)
                     </td>
+                    @if (Model.ElementAt(i).Score.ToString().Equals("-1"))
+                    {
                     <td>
-                        @Html.DisplayFor(modelItem => item.ParticipantId)
+                        @Html.DisplayFor(modelItem => Model.ElementAt(i).Comment)
                     </td>
+                    }
+                    else
+                    {
                     <td>
-                        @Html.DisplayFor(modelItem => item.Score)
+                        @Html.DisplayFor(modelItem => Model.ElementAt(i).Score)
                     </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Comment)
-                    </td>
+
+                    }
                 </tr>
             }
         </tbody>

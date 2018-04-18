@@ -51,7 +51,11 @@
                        asp-route-survID="@Model.Item2">Question Results</a>
                 </td>
                 <td>
-                    @avgs.ElementAt(i)
+                    @{  if (avgs.ElementAt(i).ToString().Equals("-1"))
+                        {@Html.DisplayName("N/A")}
+                        else
+                        { @avgs.ElementAt(i)}
+                     }
                 </td>
    
                </tr>
