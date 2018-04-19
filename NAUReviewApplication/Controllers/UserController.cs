@@ -11,7 +11,7 @@ namespace NAUReviewApplication.Controllers
     public class UserController : Controller
     {
         private readonly NAUcountryContext context;
-        private int surveyID;
+        private int SurveyID;
 
         public UserController(NAUcountryContext context)
         {
@@ -25,17 +25,21 @@ namespace NAUReviewApplication.Controllers
                 return NotFound();
             }
 
-            surveyID = Convert.ToInt32(id);
+            SurveyID = Convert.ToInt32(id);
+
+            ViewBag.surveyID = SurveyID;
 
             // Get list of questions corresponding to SurveyID 
-            var questions = getQuestionsBySurvey(2);
+            var questions = getQuestionsBySurvey(SurveyID);
 
             if (questions == null)
             {
                 return NotFound();
             }
 
-            return View(questions);
+            ViewBag.questions = questions;
+
+            return View(context.Question.ToList());
         }
 
         public ICollection<Question> getQuestionsBySurvey(int survID)
@@ -48,10 +52,8 @@ namespace NAUReviewApplication.Controllers
         public IActionResult Save(int[] score, string[] comment)
         {
             int scores, question;
-            var questions = getQuestionsBySurvey(surveyID);
+            var questions = getQuestionsBySurvey(1);// SurveyID);
             string comments;
-            
-            
 
             if (ModelState.IsValid)
             {
@@ -80,7 +82,7 @@ namespace NAUReviewApplication.Controllers
 
         public IActionResult Index()
         {
-            return View();
+            return View(context.Question.ToList());
         }
     }
 }

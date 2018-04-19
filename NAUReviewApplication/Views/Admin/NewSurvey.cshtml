@@ -6,14 +6,14 @@
     string Question = "";
     int F_N = 0;
     int Category = 0;
-    int SurveyID = 0;
-    int count = 0, temp = 0;
+    List<Question> temp = ViewBag.questions;
+    //int count = 0, temp = 0;
 }
 
-@{
+<!--{
     <!--creates a new linking id for the survey questions to the survey
     If it has already posted once then the id won't be incremented again-->
-    if (count == 0)
+    <!--if (count == 0)
     {
         foreach (var item in Model)
         {
@@ -25,7 +25,7 @@
 
         temp++;
     }
-}
+}-->
 
 <h2>NewSurvey</h2>
 
@@ -46,23 +46,23 @@
         </thead>
         <tbody>
             @{
-                foreach (var item in Model)
+                foreach (var item in temp)
                 {
-                    @if (item.SurveyQuestion.Survey.SurveyId == SurveyID)
-                    {
+                    <!--if (item.SurveyQuestion.Survey.SurveyId == SurveyID)
+                    {-->
                         <tr>
                             <td>
-                                @Html.DisplayFor(modelItem => item.ID)
+                                @Html.DisplayFor(modelItem => item.Text)
                             </td>
                             <td>
                                 @{
-                                    if (item.Category.CategoryId.ToString().Equals("0"))
+                                    if (item.CategoryId.ToString().Equals("1"))
                                         {@Html.DisplayName("Communication")}
-                                    if (item.Category.CategoryId.ToString().Equals("1"))
+                                    if (item.CategoryId.ToString().Equals("2"))
                                         {@Html.DisplayName("Collaboration")}
-                                    if (item.Category.CategoryId.ToString().Equals("2"))
+                                    if (item.CategoryId.ToString().Equals("3"))
                                         {@Html.DisplayName("Critical Thinking")}
-                                    if (item.Category.CategoryId.ToString().Equals("3"))
+                                    if (item.CategoryId.ToString().Equals("4"))
                                         {@Html.DisplayName("Creativity")}
                                 }
                             </td>
@@ -75,9 +75,9 @@
                                 }
                             </td>
                         </tr>
-                    }
+                    <!--}
                     else
-                    { }
+                    { }-->
                 }
             }
         </tbody>
@@ -105,13 +105,13 @@
         </tr>
         <tr align="center">
             <td class="radio">
-                <label><input asp-for="@Category" type="radio" value="0" />Communication</label>
+                <label><input asp-for="@Category" type="radio" value="1" checked/>Communication</label>
                 &nbsp;
-                <label><input asp-for="@Category" type="radio" value="1" />Collaberation</label>
+                <label><input asp-for="@Category" type="radio" value="2" />Collaberation</label>
                 &nbsp;
-                <label><input asp-for="@Category" type="radio" value="2" />Critical Thinking</label>
+                <label><input asp-for="@Category" type="radio" value="3" />Critical Thinking</label>
                 &nbsp;
-                <label><input asp-for="@Category" type="radio" value="3" />Creativity</label>
+                <label><input asp-for="@Category" type="radio" value="4" />Creativity</label>
             </td>
         </tr>
         <tr>
@@ -123,7 +123,7 @@
                        asp-area="" asp-controller="Admin" asp-action="AddQuestion" />
                 &nbsp;
                 <input type="submit" value="Save Survey"
-                       asp-area="" asp-controller="Admin" asp-action="SavePage" />
+                       asp-area="" asp-controller="Admin" asp-action="Index" />
             </td>
         </tr>
     </table>

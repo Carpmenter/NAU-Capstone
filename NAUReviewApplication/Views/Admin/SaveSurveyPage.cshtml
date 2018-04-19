@@ -2,11 +2,10 @@
 @{
     ViewData["Title"] = "Save";
 
-    int I_G = 0;
     string name = "";
     DateTime SurveyDate;
 
-    SurveyDate = DateTime.Now;
+    SurveyDate = DateTime.Today;
 }
 
 <h2>Save</h2>
@@ -16,21 +15,13 @@
         <tr align="center">
             <td>Please enter the name for the survey:<br /><input id="text1" type="text" asp-for="@name" /></td>
         </tr>
-        <tr align="center">
-            <td class="radio">
-                <label><input asp-for="@I_G" type="radio" value="0" />Individual Survey</label>
-            </td>
-            <td class="radio">
-                <label><input asp-for="@I_G" type="radio" value="1" />Group Survey</label>
-            </td>
-        </tr>
         <tr>
             <td>&nbsp;</td>
         </tr>
         <tr align="center">
             <td>
-                <input type="submit" value="Save Survey"
-                       asp-area="" asp-controller="Admin" asp-action="Save" />
+                <input type="submit" value="Create Survey"
+                       asp-area="" asp-controller="Admin" asp-action="Create" />
             </td>
         </tr>
     </table>

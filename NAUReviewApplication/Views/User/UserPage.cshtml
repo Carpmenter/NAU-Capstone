@@ -1,4 +1,4 @@
-﻿@model ICollection<NAUReviewApplication.Models.Question>
+﻿@model IEnumerable<NAUReviewApplication.Models.Question>
 
 @{
     ViewData["Title"] = "Survey";
@@ -7,71 +7,62 @@
     string[] comment = new string[100];
     int[] questionID = new int[100];
     int counter = 0, questionNum = 1;
+    int SurveyID = ViewBag.surveyID;
+    List<Question> temp = ViewBag.questions;
 }
 
-<h2>Create</h2>
+<h2>Survey</h2>
 
-<h4>Group</h4>
 <hr />
-<div class="row">
-    <div class="col-md-4">
         <form method="post">
             <table class="table">
                 <tbody>
-                    @foreach (var item in Model)
+                    @foreach (var item in temp)
                     {
                         <tr>
-                            
-                                <!--questionID[counter] = item.QuestionId;-->
-
                                 <td>
                                 @questionNum
                                 </td>
-                                questionNum++;
+                                @{questionNum++;}
 
                                 <td>
                                 @Html.DisplayFor(modelItem => item.Text)
                                 </td>
 
-                                <td>
                                 @if (item.Type.ToString().Equals("0"))
                                 {
                                         <td>
-                                        <label><textarea asp-for="@comment[counter]" cols="80" rows="5">Enter Answer Here</textarea></label>
+                                        <label><textarea asp-for="@comment[counter]" cols="91" rows="5">Enter Answer Here</textarea></label>
                                         </td>
 
-                                    score[counter] = 1;// null;
+                                    score[counter] = -1;// null;
                                     counter++;
                                 }
                                 else
                                 {
                                         <td>
-                                            <label><input asp-for="@score[counter]" type="radio" value="1" />1</label>
-                                            &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
-                                            <label><input asp-for="@score[counter]" type="radio" value="2" />2</label>
-                                            &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
-                                            <label><input asp-for="@score[counter]" type="radio" value="3" />3</label>
-                                            &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
-                                            <label><input asp-for="@score[counter]" type="radio" value="4" />4</label>
-                                            &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
-                                            <label><input asp-for="@score[counter]" type="radio" value="5" />5</label>
+                                            <label><input asp-for="@score[counter]" type="radio" value="1" />Strongly Disagree</label>
+                                            &emsp;&emsp;&emsp;
+                                            <label><input asp-for="@score[counter]" type="radio" value="2" />Disagree</label>
+                                            &emsp;&emsp;&emsp;
+                                            <label><input asp-for="@score[counter]" type="radio" value="3" />Nuetral</label>
+                                            &emsp;&emsp;&emsp;
+                                            <label><input asp-for="@score[counter]" type="radio" value="4" />Agree</label>
+                                            &emsp;&emsp;&emsp;
+                                            <label><input asp-for="@score[counter]" type="radio" value="5" />Strongly Agree</label>
                                         </td>
 
                                     comment[counter] = null;
                                     counter++;
                                 }
-                                </td>
-                            
                        </tr>
                     }
                     <tr align="right">
                         <td>
                             <input type="submit" value="Submit"
-                                   asp-area="" asp-controller="Admin" asp-action="ThankYou" />
+                                   asp-area="" asp-controller="User" asp-action="Save" />
                         </td>
                     </tr>
                 </tbody>
             </table>
         </form>
-     </div>
-</div>

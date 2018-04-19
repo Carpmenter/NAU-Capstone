@@ -102,7 +102,7 @@ namespace NAUReviewApplication.Models
 
             modelBuilder.Entity<Survey>(entity =>
             {
-                entity.Property(e => e.SurveyId).HasColumnName("SurveyID");
+                entity.Property(e => e.SurveyId).HasColumnName("ID");
 
                 entity.Property(e => e.CreationDate)
                     .HasColumnName("creationDate")
