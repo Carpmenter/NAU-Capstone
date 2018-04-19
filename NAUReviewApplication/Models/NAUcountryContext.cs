@@ -45,34 +45,23 @@ namespace NAUReviewApplication.Models
 
             modelBuilder.Entity<Category>(entity =>
             {
-                entity.Property(e => e.CategoryId)
-                    .HasColumnName("CategoryID")
-                    .HasMaxLength(100)
-                    .IsUnicode(false)
-                    .ValueGeneratedNever();
-
+                entity.Property(e => e.CategoryId).HasColumnName("ID");
+                entity.Property(e => e.Name).IsRequired();
                 entity.Property(e => e.Description).IsRequired();
             });
 
             modelBuilder.Entity<Group>(entity =>
             {
-                entity.Property(e => e.GroupId)
-                    .HasColumnName("GroupID")
-                    .HasMaxLength(100)
-                    .IsUnicode(false)
-                    .ValueGeneratedNever();
-
+                entity.Property(e => e.GroupId).HasColumnName("ID");
+                entity.Property(e => e.Name).IsRequired();
                 entity.Property(e => e.Description).IsRequired();
             });
 
             modelBuilder.Entity<Participant>(entity =>
             {
-                entity.Property(e => e.ParticipantId).HasColumnName("ParticipantID");
+                entity.Property(e => e.ParticipantId).HasColumnName("ID");
 
-                entity.Property(e => e.GroupId)
-                    .HasColumnName("GroupID")
-                    .HasMaxLength(100)
-                    .IsUnicode(false);
+                entity.Property(e => e.GroupId).HasColumnName("GroupID");
 
                 entity.Property(e => e.SurveyId).HasColumnName("SurveyID");
 
@@ -82,8 +71,7 @@ namespace NAUReviewApplication.Models
 
                 entity.HasOne(d => d.Group)
                     .WithMany(p => p.Participant)
-                    .HasForeignKey(d => d.GroupId)
-                    .OnDelete(DeleteBehavior.Cascade);
+                    .HasForeignKey(d => d.GroupId);
 
                 entity.HasOne(d => d.Survey)
                     .WithMany(p => p.Participant)
@@ -94,15 +82,9 @@ namespace NAUReviewApplication.Models
             {
                 entity.Property(e => e.QuestionId).HasColumnName("ID");
 
-                entity.Property(e => e.CategoryId)
-                    .HasColumnName("CategoryID")
-                    .HasMaxLength(100)
-                    .IsUnicode(false);
+                entity.Property(e => e.GroupId).HasColumnName("GroupID");
 
-                entity.Property(e => e.GroupId)
-                    .HasColumnName("GroupID")
-                    .HasMaxLength(100)
-                    .IsUnicode(false);
+                entity.Property(e => e.CategoryId).HasColumnName("CategoryID");
 
                 entity.Property(e => e.Text).IsRequired();
 
@@ -111,18 +93,16 @@ namespace NAUReviewApplication.Models
 
                 entity.HasOne(d => d.Category)
                     .WithMany(p => p.Question)
-                    .HasForeignKey(d => d.CategoryId)
-                    .OnDelete(DeleteBehavior.Cascade);
+                    .HasForeignKey(d => d.CategoryId);
 
                 entity.HasOne(d => d.Group)
                     .WithMany(p => p.Question)
-                    .HasForeignKey(d => d.GroupId)
-                    .OnDelete(DeleteBehavior.Cascade);
+                    .HasForeignKey(d => d.GroupId);
             });
 
             modelBuilder.Entity<Survey>(entity =>
             {
-                entity.Property(e => e.ID).HasColumnName("ID");
+                entity.Property(e => e.SurveyId).HasColumnName("SurveyID");
 
                 entity.Property(e => e.CreationDate)
                     .HasColumnName("creationDate")
@@ -161,7 +141,7 @@ namespace NAUReviewApplication.Models
             {
                 entity.HasKey(e => e.ResponseId);
 
-                entity.Property(e => e.ResponseId).HasColumnName("ResponseID");
+                entity.Property(e => e.ResponseId).HasColumnName("ID");
 
                 entity.Property(e => e.ParticipantId).HasColumnName("ParticipantID");
 

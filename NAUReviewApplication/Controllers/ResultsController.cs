@@ -27,25 +27,37 @@ namespace NAUReviewApplication.Controllers
 
         public IActionResult Responses(string id)
         {
+            
             if (id == null)
             {
                 return NotFound();
             }
 
             surveyID = Convert.ToInt32(id);
+            List<double> averages = new List<double>();
+            
 
             // Get list of questions corresponding to SurveyID 
             var questions = getQuestionsBySurvey(surveyID);
+            foreach(var q in questions)
+            {
+                double temp = getAvgResponses(q.QuestionId, surveyID);
+                averages.Add(temp);
+            }
+
+            ViewBag.Questions = getQuestionsBySurvey(surveyID);
+            ViewBag.Survey = surveyID;
+            ViewBag.Averages = averages;
 
             if (questions == null)
             {
                 return NotFound();
             }
 
-            return View(questions);
+            return View(Tuple.Create(questions, surveyID));
         }
 
-        public IActionResult QuestionResults(string id)
+        public IActionResult QuestionResults(string id, int survID)
         {
             if (id == null)
             {
@@ -55,7 +67,7 @@ namespace NAUReviewApplication.Controllers
             int intID = Convert.ToInt32(id);
 
             // Get all responses to questionID from surveyID
-            var questionResponses = getQuestionResponses(intID, surveyID);
+            var questionResponses = getQuestionResponses(intID, survID);
 
             if (questionResponses == null)
             {
@@ -75,15 +87,21 @@ namespace NAUReviewApplication.Controllers
         public ICollection<SurveyResponse> getQuestionResponses(int questID, int survID)
         {
             // Select all responses from question questID in survey survID
-            /* return context.SurveyResponse
-                 .Where(sr => sr.QuestionId == questID)
-                 .Where(sr => sr.SurveyId == survID)
-                 .ToList(); */
-            return context.SurveyResponse
-                .Where(s => s.SurveyId == 13)
-                .ToList();
+            return context.SurveyResponse.Where(sr =>
+                 sr.QuestionId == questID &&
+                 sr.SurveyId == survID)
+                 .ToList();
+        }
+        
+        public double getAvgResponses(int questID, int survID)
+        {
+            // Selects responses from question questID in survey survID
+            // Then returns average for that response
+            var avg = context.SurveyResponse.Where(sr =>
+                 sr.QuestionId == questID &&
+                 sr.SurveyId == survID).ToList();
 
-
+            return avg.Select(x => x.Score).Average();
         }
 
 
