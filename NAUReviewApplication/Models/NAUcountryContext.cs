@@ -47,7 +47,6 @@ namespace NAUReviewApplication.Models
             {
                 entity.Property(e => e.CategoryId).HasColumnName("ID");
                 entity.Property(e => e.Name).IsRequired();
-                entity.Property(e => e.Description).IsRequired();
             });
 
             modelBuilder.Entity<Group>(entity =>

@@ -30,7 +30,7 @@
                     @Html.DisplayFor(modelItem => item.Description)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.CreationDate)
+                    @item.CreationDate.ToString("MM/dd/yyyy")
                 </td>
                 <td>
                     <a aps-controller="Admin" asp-action="emailPage" asp-route-id="@item.SurveyId">Send</a>

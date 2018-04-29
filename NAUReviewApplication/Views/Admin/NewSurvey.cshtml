@@ -66,14 +66,14 @@
             <td>&nbsp;</td>
         </tr>
         <tr align="Center">
-            <td>Please enter your question:<br /><input type="text" asp-for="@Question" required/></td>
+            <td>Please enter your question:<br /><input type="text" asp-for="@Question"/></td>
         </tr>
         <tr>
             <td>&nbsp;</td>
         </tr>
         <tr align="center">
             <td class="radio">
-                <label><input asp-for="@F_N" type="radio" value="0" required/>Free Text</label>
+                <label><input asp-for="@F_N" type="radio" value="0"/>Free Text</label>
                 &nbsp;
                 <label><input asp-for="@F_N" type="radio" value="1" />Number Scale</label>
             </td>
@@ -83,7 +83,7 @@
         </tr>
         <tr align="center">
             <td class="radio">
-                <label><input asp-for="@Category" type="radio" value="1" required/>Communication</label>
+                <label><input asp-for="@Category" type="radio" value="1" />Communication</label>
                 &nbsp;
                 <label><input asp-for="@Category" type="radio" value="2" />Collaberation</label>
                 &nbsp;

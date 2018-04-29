@@ -148,6 +148,10 @@ namespace NAUReviewApplication.Controllers
             {
                 return RedirectToAction(nameof(NewSurvey));
             }
+            if(Category == 0)
+            {
+                return RedirectToAction(nameof(NewSurvey));
+            }
             var CreateQuestion = new Question { GroupId = 1, CategoryId = Category, Text = Question, Type = F_N };
             SurveyID = getSurveyID();
 
