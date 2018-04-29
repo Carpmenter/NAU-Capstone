@@ -5,36 +5,44 @@
 }
 
 <h2>Completed Surveys</h2>
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
+
 <table class="table">
     <thead>
         <tr>
-            <th>Survey ID</th>
             <th>
                 @Html.DisplayNameFor(model => model.Description)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.CreationDate)
+                @Html.DisplayName("Survey Type")
             </th>
-            <th></th>
+            <th>
+                @Html.DisplayName("Creation Date")
+            </th>
+            <th>
+                Survey Details
+            </th>
         </tr>
     </thead>
     <tbody>
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.SurveyId)
-            </td>
-            <td>
                 @Html.DisplayFor(modelItem => item.Description)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.CreationDate)
+                @if (item.Type.ToString().Equals("0"))
+                {
+                    @Html.DisplayName("Project")
+                }else
+                {
+                    @Html.DisplayName("Individual")
+                }
             </td>
             <td>
-                <a asp-action="Responses" asp-route-id="@item.SurveyId">Survey Details</a>
+                @item.CreationDate.ToString("MM/dd/yyyy")
+            </td>
+            <td>
+                <a asp-action="Responses" asp-route-id="@item.SurveyId">View Details</a>
             </td>
         </tr>
 }

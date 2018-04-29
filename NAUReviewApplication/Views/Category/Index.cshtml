@@ -1,7 +1,7 @@
-﻿@model IEnumerable<NAUReviewApplication.Models.Group>
+﻿@model IEnumerable<NAUReviewApplication.Models.Category>
 
 @{
-   
+    ViewBag.Tutle = "Category";
 }
 
 <!DOCTYPE html>
@@ -12,8 +12,7 @@
     <title>Index</title>
 </head>
 <body>
-    <h2>Existing Groups</h2>
-    <br />
+    <h2>Categories</h2>
     <p>
         <a asp-action="Create" class="btn btn-default">
             <span class="glyphicon glyphicon-plus-sign">&nbsp;New</span>
@@ -23,7 +22,7 @@
     <table class="table table-hover">
         <thead>
             <tr>
-                <th>Group Name</th>
+                <th>Category Name</th>
                 <th></th>
             </tr>
         </thead>
@@ -35,13 +34,13 @@
                         @Html.DisplayFor(modelItem => item.Name)
                     </td>
                     <td>
-                        <a asp-action="Edit" asp-route-id="@item.GroupId" class="btn btn-default">
+                        <a asp-action="Edit" asp-route-id="@item.CategoryId" class="btn btn-default">
                             <span class="glyphicon glyphicon-pencil">&nbsp;Edit</span>
                         </a>
-                        <a asp-action="Details" asp-route-id="@item.GroupId" class="btn btn-default">
-                            <span class="glyphicon glyphicon-list-alt">&nbsp;Details</span>
+                        <a asp-action="Details" asp-route-id="@item.CategoryId" class="btn btn-default">
+                            <span class="glyphicon glyphicon-list-alt">&nbsp;View</span>
                         </a>
-                        <a asp-action="Delete" asp-route-id="@item.GroupId" class="btn btn-default">
+                        <a asp-action="Delete" asp-route-id="@item.CategoryId" class="btn btn-default">
                             <span class="glyphicon glyphicon-remove">&nbsp;Delete</span>
                         </a>
                     </td>

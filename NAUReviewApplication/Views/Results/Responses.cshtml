@@ -6,6 +6,11 @@
 
     int length = Model.Item1.Count();
     List<double> avgs = ViewBag.Averages;
+    List<Group> groups = ViewBag.Groups;
+    List<SurveyResponse> comments = ViewBag.Comments;
+    Survey survey = ViewBag.Survey;
+    Participant recipient = ViewBag.Recipient;
+    List<SurveyResponse> recipientAnswers = ViewBag.RecipAnswers;
 }
 
 <!DOCTYPE html>
@@ -16,49 +21,99 @@
     <title>Responses</title>
 </head>
 <body>
-    <h1>Survey @Model.Item2 Questions:</h1>
+    <h1>Survey Questions</h1>
     <table class="table">
         <thead>
             <tr>
                 <th>Question</th>
+                @if (survey.Type == 1)
+                {
+                    <th>
+                        Average of Peers
+                    </th>
+                    <th>
+                       @recipient.Username's Answers
+                    </th>
+
+                }else if (survey.Type == 0)
+                {
+                    <th>
+                        Overall Average
+                    </th>
+                    foreach (var g in groups)
+                    {
+                        <th>
+                            @g.Name
+                        </th>
+                    }
+                }
                 <th>
-                    Question Type
-                </th>
-                <th>
-                    Results
-                </th>
-                <th>
-                    Overall Average
+                    Individual Results
                 </th>
             </tr>
         </thead>
         <tbody>
             @for (int i = 0; i < length; i++)
             {
-            <tr>
-                <td>
-                    @Model.Item1.ElementAt(i).Text
-                </td>
-                <td>
-                    @{  if (Model.Item1.ElementAt(i).Type.ToString().Equals("0"))
-                        { @Html.DisplayName("Numeric")}
+                <tr>
+                    <td>
+                        @Model.Item1.ElementAt(i).Text
+                    </td>
+                    <td>
+                     @{ if (avgs.ElementAt(i).ToString().Equals("-1"))
+                        {
+                             @Html.DisplayName("N/A")
+                        }
                         else
-                        { @Html.DisplayName("Text")}
+                        {
+                             @avgs.ElementAt(i)}
+                        }
+                    </td>
+                    @if (survey.Type == 1)
+                    {
+                        <td>
+                            @if (recipientAnswers.ElementAt(i).Score.ToString().Equals("-1"))
+                            {
+                                @Html.DisplayName("N/A")
+                            }else
+                            {
+                                @recipientAnswers.ElementAt(i).Score
+                            }
+                        </td>
+                    } else if (survey.Type == 0)
+                    {
+                        foreach (var g in groups)
+                        {
+                            <td>
+                                group average
+                            </td>
+
+                        }
                     }
-                </td>
-                <td>
-                    <a asp-action="QuestionResults" asp-route-id="@Model.Item1.ElementAt(i).QuestionId"
-                       asp-route-survID="@Model.Item2">Question Results</a>
-                </td>
-                <td>
-                    @{  if (avgs.ElementAt(i).ToString().Equals("-1"))
-                        {@Html.DisplayName("N/A")}
-                        else
-                        { @avgs.ElementAt(i)}
-                     }
-                </td>
-   
-               </tr>
+                    <td>
+                        <a asp-action="QuestionResults" asp-route-id="@Model.Item1.ElementAt(i).QuestionId"
+                           asp-route-survID="@Model.Item2">View</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    Comments to Support the Answers Above
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var com in comments)
+            { 
+                <tr>
+                    <td>
+                        @com.Comment
+                    </td>
+                </tr>
             }
         </tbody>
     </table>

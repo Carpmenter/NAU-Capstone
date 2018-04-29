@@ -1,7 +1,7 @@
-﻿@model NAUReviewApplication.Models.Group
+﻿@model NAUReviewApplication.Models.Category
 
 @{
-   
+
 }
 
 <!DOCTYPE html>
@@ -12,9 +12,9 @@
     <title>Delete</title>
 </head>
 <body>
-<h2>Delete Group</h2>
-<h3>Are you sure you want to delete this?</h3>
-<hr />
+    <h2>Delete Group</h2>
+    <h3>Are you sure you want to delete this?</h3>
+    <hr />
     <div class="row">
         <div class="col-md-4">
             <dl class="dl-horizontal">
@@ -27,7 +27,7 @@
             </dl>
 
             <form asp-action="Delete">
-                <input type="hidden" asp-for="GroupId" />
+                <input type="hidden" asp-for="CategoryId" />
                 <a asp-action="Index" class="btn btn-default">
                     <span class="glyphicon glyphicon-menu-left">&nbsp;Back</span>
                 </a>

@@ -1,24 +1,21 @@
-﻿@model NAUReviewApplication.Models.Group
-
+﻿@model NAUReviewApplication.Models.Category
 @{
-    
+
 }
-
 <!DOCTYPE html>
-
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
-    <title>Create</title>
+    <title>Edit</title>
 </head>
 <body>
-    <h2>Create Group</h2>
-    <br />
+    <h2>Edit Group</h2>
     <hr />
     <div class="row">
         <div class="col-md-4">
-            <form asp-action="Create">
+            <form asp-action="Edit">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="CategoryId" />
                 <div class="form-group">
                     <label asp-for="Name" class="control-label"></label>
                     <input asp-for="Name" class="form-control" />

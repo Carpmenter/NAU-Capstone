@@ -34,19 +34,41 @@ namespace NAUReviewApplication.Controllers
             }
 
             surveyID = Convert.ToInt32(id);
+            var survey = context.Survey.Single(s => s.SurveyId == surveyID);
             List<double> averages = new List<double>();
-            
+            List<SurveyResponse> recipientResponses = new List<SurveyResponse>();
 
             // Get list of questions corresponding to SurveyID 
             var questions = getQuestionsBySurvey(surveyID);
-            foreach(var q in questions)
+
+            foreach (var q in questions)
             {
-                double temp = getAvgResponses(q.QuestionId, surveyID);
-                averages.Add(temp);
+                double temp;
+                if (survey.Type == 1)
+                {   // if individual survey extra data for self responses needed and average filtered
+                    var recipient = getRecipient(surveyID);
+                    var response = getResponseFor(q.QuestionId, surveyID, recipient.ParticipantId);
+                    recipientResponses.Add(response);
+                    temp = getAvgResponses(q.QuestionId, surveyID, recipient.ParticipantId);
+                    averages.Add(temp);
+                }
+                else
+                {
+                    temp = getAvgResponses(q.QuestionId, surveyID);
+                    averages.Add(temp);
+                }
             }
 
+            if (survey.Type == 1)
+            {
+                ViewBag.Recipient = getRecipient(surveyID);
+                ViewBag.RecipAnswers = recipientResponses;
+            }
+
+            ViewBag.Comments = getComments(surveyID);
+            ViewBag.Groups = getSurveyGroups(surveyID);
             ViewBag.Questions = getQuestionsBySurvey(surveyID);
-            ViewBag.Survey = surveyID;
+            ViewBag.Survey = survey;
             ViewBag.Averages = averages;
 
             if (questions == null)
@@ -112,65 +134,102 @@ namespace NAUReviewApplication.Controllers
                  sr.QuestionId == questID &&
                  sr.SurveyId == survID).ToList();
 
-            return avg.Select(x => x.Score).Average();
+            return Math.Round(avg.Select(x => x.Score).Average(), 2);
         }
 
-
-        public IActionResult Create()
+        public double getAvgResponses(int questID, int survID, int recipientID)
         {
-            DateTime sDate = new DateTime(2018, 10, 17);
-            DateTime today = DateTime.Today;
-            var testSurvey = new Survey { Description = "First test Survey Created", CreationDate = sDate };
-            var testSurvey2 = new Survey { Description = "General Project Servey", CreationDate = today };
-            var q1 = new Question { Type = 0, Text = "Effectively Mitigated Risks" };
-            var q2 = new Question { Type = 1, Text = "List one thing you can improve on" };
-            var q3 = new Question { Type = 0, Text = "Effectively Mitigated Risks" };
-            var sq1 = new SurveyQuestion();
-            var sq2 = new SurveyQuestion();
+            // Selects responses from question questID in survey survID excluding recipient partID
+            // Then returns average for that response
+            var avg = context.SurveyResponse.Where(sr =>
+                 sr.QuestionId == questID &&
+                 sr.SurveyId == survID &&
+                 sr.ParticipantId != recipientID).ToList();
 
-            /*** General Process for adding entities with many-to-many relationships ***/
-            /*
-            //Survey 1 mapping
-            sq1.Survey = testSurvey;
-            sq1.Question = q1;
-            sq2.Survey = testSurvey;
-            sq2.Question = q2;
-            //Survey 2 mapping
-            //sq2.Survey = testSurvey2;
-            //sq2.Question = q1;
-            //sq2.Question = q2;
-            //sq2.Question = q3;
-            //Linking data
-            testSurvey.SurveyQuestions.Add(sq1);
-            testSurvey.SurveyQuestions.Add(sq2);
-            // add to context
-            //context.Survey.Add(testSurvey);
-            context.Question.Add(q1);
-            context.Question.Add(q2);
-            */
-            /*** Included when adding large number of entities is needed ***
-             
-            public async Task SaveEntities(IEnumerable<SurveyQuestion> surveyQuestions)
+            return Math.Round(avg.Select(x => x.Score).Average(), 2);
+        }
+
+        public ICollection<Group> getSurveyGroups(int survID)
+        {
+            // gets list of participants of a survey
+            // then returns list of distinct groups participants are assigned to
+            var participants = context.SurveyResponse.Where(sr => sr.SurveyId == survID)
+                .Select(sr => sr.ParticipantId).Distinct().ToList();
+
+            List<int> groupIDs = new List<int>();
+
+            foreach (var p in participants)
             {
-                int i = 0;
-                foreach (var sq in surveyQuestions)
+                var GID = context.Participant.Where(x => x.ParticipantId == p)
+                    .Select(x => x.GroupId).Single();
+
+                groupIDs.Add(GID);
+            }
+
+            groupIDs = groupIDs.Distinct().ToList();
+            List<Group> groups = new List<Group>();
+
+            foreach(var g in groupIDs)
+            {
+                groups.Add(context.Group.Single(x => x.GroupId == g));
+            }
+
+            return groups;
+        }
+        
+        public Tuple<List<Group>, List<double>> getAverageByGroup(int questID, int survID)
+        {
+            var responses = context.SurveyResponse.Where(sr =>
+                 sr.QuestionId == questID &&
+                 sr.SurveyId == survID).ToList();
+
+            var surveyGroups = getSurveyGroups(survID);
+            List<double> avgs = new List<double>();
+            List<Group> groups = new List<Group>();
+
+            foreach(var r in responses)
+            {
+                var pGroup = context.Participant.Where(p => p.ParticipantId == r.ParticipantId)
+                    .Select(p => p.GroupId);
+                var group = context.Group.Where(g => g.GroupId == Convert.ToInt32(pGroup));
+                int score = r.Score;
+            }
+            return Tuple.Create(groups, avgs);
+        }
+
+        public ICollection<SurveyResponse> getComments(int survID)
+        {
+            // returns all comments for a given survey
+            List<SurveyResponse> comments = new List<SurveyResponse>();
+            var responses = context.SurveyResponse.Where(sr => sr.SurveyId == survID).ToList();
+            foreach (var r in responses)
+            {
+                if (r.Comment != null)
                 {
-                    context.Set<Survey>().Add(SurveyQuestion.Survey);
-                    context.Set<Question>().Add(SurveyQuestion.Question);
-                    context.Set<SurveyQuestion>().Add(sq);
-                    i++;
-                    if (i == 99)
-                    {
-                        await context.SaveChangesAsync();
-                        i = 0;
-                    }
+                    comments.Add(r);
                 }
-                await context.SaveChangesAsync();
-            } *************************************************************/
+            }
 
-            context.SaveChanges();
+            return comments;
+        }
 
-            return View();
+        public Participant getRecipient(int survID)
+        {
+            //returns the participant object for whom is getting reviewed for a given survey
+            var survey = context.Survey.Single(s => s.SurveyId == survID);
+            var recipient = context.Participant.Single(p => p.Username == survey.Recipient);
+
+            return recipient;
+        }
+
+        public SurveyResponse getResponseFor(int questID, int survID, int participantID)
+        {
+            var response = context.SurveyResponse.Where(sr =>
+                sr.QuestionId == questID &&
+                sr.SurveyId == survID &&
+                sr.ParticipantId == participantID).Single();
+
+            return response;
         }
 
     }
