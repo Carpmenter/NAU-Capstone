@@ -22,6 +22,8 @@ namespace NAUReviewApplication.Controllers
             string username = usernm;
             string password = passwrd;
 
+            return View();
+
             foreach (Admin a in _context.Admin)
             {
                 if (a.Username == username && a.Password == password)

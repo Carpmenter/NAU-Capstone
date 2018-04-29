@@ -1,0 +1,62 @@
+﻿@model ICollection<NAUReviewApplication.Models.Question>
+
+@{
+    ViewData["Title"] = "Survey";
+}
+
+<h2>Survey</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Question ID
+            </th>
+            <th>
+                Survey Name
+            </th>
+            <th>
+                Group
+            </th>
+            <th>
+                Survey Date
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.QuestionId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SurveyQuestion.Survey.Description)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.GroupId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SurveyQuestion.Survey.CreationDate)
+                </td>
+                <td>
+                    <a asp-action="Select" asp-route-id="@item.QuestionId">Select</a> |
+                    <a asp-action="Delete" asp-route-id="@item.QuestionId"> Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+<table style="width:100%;">
+    <tr>
+        <td align="center">
+            <form method="POST">
+                <input type="submit" value="Create a New Survey"
+                       asp-area="" asp-controller="Admin" asp-action="NewSurvey" />
+            </form>
+        </td>
+    </tr>
+</table>

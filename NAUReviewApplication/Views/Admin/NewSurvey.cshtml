@@ -1,0 +1,108 @@
+﻿@model IEnumerable<NAUReviewApplication.Models.Question>
+
+@{
+    ViewData["Title"] = "NewSurvey";
+
+    string Question = "";
+    int F_N = 0;
+    int Category = 0;
+    List<Question> temp = ViewBag.questions;
+
+}
+
+<h2>NewSurvey</h2>
+
+<form method="POST">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    Question
+                </th>
+                <th>
+                    Category
+                </th>
+                <th>
+                    Free text/Number Scale
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                foreach (var item in temp)
+                {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Text)
+                            </td>
+                            <td>
+                                @{
+                                    if (item.CategoryId.ToString().Equals("1"))
+                                        {@Html.DisplayName("Communication")}
+                                    if (item.CategoryId.ToString().Equals("2"))
+                                        {@Html.DisplayName("Collaboration")}
+                                    if (item.CategoryId.ToString().Equals("3"))
+                                        {@Html.DisplayName("Critical Thinking")}
+                                    if (item.CategoryId.ToString().Equals("4"))
+                                        {@Html.DisplayName("Creativity")}
+                                }
+                            </td>
+                            <td>
+                                @{
+                                    if (item.Type.ToString().Equals("0"))
+                                        {@Html.DisplayName("Free Text")}
+                                    else
+                                        {@Html.DisplayName("Number Scale")}
+                                }
+                            </td>
+                        </tr>
+                }
+            }
+        </tbody>
+    </table>
+
+    <table style="width:100%;">
+        <tr>
+            <td>&nbsp;</td>
+        </tr>
+        <tr align="Center">
+            <td>Please enter your question:<br /><input type="text" asp-for="@Question" required/></td>
+        </tr>
+        <tr>
+            <td>&nbsp;</td>
+        </tr>
+        <tr align="center">
+            <td class="radio">
+                <label><input asp-for="@F_N" type="radio" value="0" required/>Free Text</label>
+                &nbsp;
+                <label><input asp-for="@F_N" type="radio" value="1" />Number Scale</label>
+            </td>
+        </tr>
+        <tr>
+            <td>&nbsp;</td>
+        </tr>
+        <tr align="center">
+            <td class="radio">
+                <label><input asp-for="@Category" type="radio" value="1" required/>Communication</label>
+                &nbsp;
+                <label><input asp-for="@Category" type="radio" value="2" />Collaberation</label>
+                &nbsp;
+                <label><input asp-for="@Category" type="radio" value="3" />Critical Thinking</label>
+                &nbsp;
+                <label><input asp-for="@Category" type="radio" value="4" />Creativity</label>
+            </td>
+        </tr>
+        <tr>
+            <td>&nbsp;</td>
+        </tr>
+        <tr align="center">
+            <td>
+                <input type="submit" value="Add A Question"
+                       asp-area="" asp-controller="Admin" asp-action="AddQuestion" />
+                &nbsp;
+                <input type="submit" value="Save Survey"
+                       asp-area="" asp-controller="Admin" asp-action="Index" />
+            </td>
+        </tr>
+    </table>
+</form>

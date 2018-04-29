@@ -1,0 +1,44 @@
+﻿@model NAUReviewApplication.Models.Question
+
+@{
+    ViewData["Title"] = "Select";
+}
+
+<h2>Select</h2>
+
+<h3>Would you like to use this survey?</h3>
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            Question ID
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ID)
+        </dd>
+        <dt>
+            Name
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.SurveyQuestion.Survey.Description)
+        </dd>
+        <dt>
+            Individual/Group
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Group.Description)
+        </dd>
+        <dt>
+            Survey Date
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.SurveyQuestion.Survey.CreationDate)
+        </dd>
+    </dl>
+
+    <form asp-action="Select">
+        <input type="hidden" asp-for="SurveyQuestion.Survey.SurveyId" />
+        <input type="submit" value="Select" class="btn btn-default" /> |
+        <a asp-action="Survey">Back to List</a>
+    </form>
+</div>
