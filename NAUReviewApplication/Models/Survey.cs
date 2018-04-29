@@ -7,7 +7,6 @@ namespace NAUReviewApplication.Models
     {
         public Survey()
         {
-            Participant = new HashSet<Participant>();
             SurveyResponse = new HashSet<SurveyResponse>();
         }
 
@@ -18,7 +17,6 @@ namespace NAUReviewApplication.Models
         public string Recipient { get; set; }
         public List<SurveyQuestion> SurveyQuestions { get; set; } = new List<SurveyQuestion>();
 
-        public ICollection<Participant> Participant { get; set; }
         public ICollection<SurveyResponse> SurveyResponse { get; set; }
     }
 }

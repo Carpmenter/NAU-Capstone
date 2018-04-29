@@ -53,7 +53,6 @@ namespace NAUReviewApplication.Models
             {
                 entity.Property(e => e.GroupId).HasColumnName("ID");
                 entity.Property(e => e.Name).IsRequired();
-                entity.Property(e => e.Description).IsRequired();
             });
 
             modelBuilder.Entity<Participant>(entity =>
@@ -62,8 +61,6 @@ namespace NAUReviewApplication.Models
 
                 entity.Property(e => e.GroupId).HasColumnName("GroupID");
 
-                entity.Property(e => e.SurveyId).HasColumnName("SurveyID");
-
                 entity.Property(e => e.Username)
                     .IsRequired()
                     .HasMaxLength(50);
@@ -71,10 +68,7 @@ namespace NAUReviewApplication.Models
                 entity.HasOne(d => d.Group)
                     .WithMany(p => p.Participant)
                     .HasForeignKey(d => d.GroupId);
-
-                entity.HasOne(d => d.Survey)
-                    .WithMany(p => p.Participant)
-                    .HasForeignKey(d => d.SurveyId);
+                
             });
 
             modelBuilder.Entity<Question>(entity =>
@@ -108,6 +102,7 @@ namespace NAUReviewApplication.Models
                     .HasColumnType("date");
 
                 entity.Property(e => e.Description).IsRequired();
+                entity.Property(e => e.Type).IsRequired();
             });
 
             modelBuilder.Entity<SurveyQuestion>(entity =>
