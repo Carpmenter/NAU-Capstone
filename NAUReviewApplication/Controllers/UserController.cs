@@ -12,13 +12,14 @@ namespace NAUReviewApplication.Controllers
     {
         private readonly NAUcountryContext context;
         private int SurveyID;
+        private int ParticipantID;
 
         public UserController(NAUcountryContext context)
         {
             this.context = context;
         }
 
-        public IActionResult UserPage(string id)
+        public IActionResult UserPage(string id, string part)
         {
             if (id == null)
             {
@@ -26,8 +27,10 @@ namespace NAUReviewApplication.Controllers
             }
 
             SurveyID = Convert.ToInt32(id);
+            ParticipantID = Convert.ToInt32(part);
 
             ViewBag.surveyID = SurveyID;
+            ViewBag.participantID = ParticipantID;
 
             // Get list of questions corresponding to SurveyID 
             var questions = getQuestionsBySurvey(SurveyID);
@@ -39,7 +42,7 @@ namespace NAUReviewApplication.Controllers
 
             ViewBag.questions = questions;
 
-            return View(context.Question.ToList());
+            return View();
         }
 
         public ICollection<Question> getQuestionsBySurvey(int survID)
@@ -49,21 +52,33 @@ namespace NAUReviewApplication.Controllers
                 .Select(sq => sq.Question).ToList();
         }
 
-        public IActionResult Save(int[] score, string[] comment)
+        [HttpPost]
+        public IActionResult Save(int[] score, string[] comment, int SurveyID, int ParticipantID)
         {
-            int scores, question;
-            var questions = getQuestionsBySurvey(1);// SurveyID);
+            int scores,question,scount = 0, ccount = 0; 
+            var questions = getQuestionsBySurvey(1);
             string comments;
 
             if (ModelState.IsValid)
             {
-                for (int i = 0; i < score.Length; i++)
+                for (int i = 0; i < (score.Length + comment.Length); i++)
                 {
-                    scores = score[i];
                     question = questions.ElementAt(i).QuestionId;
-                    comments = comment[i];
 
-                    var surveyResponses = new SurveyResponse { SurveyId = 1, QuestionId = question, ParticipantId = 1, Score = scores, Comment = comments};
+                    if(questions.ElementAt(i).Type.ToString().Equals("0"))
+                    {
+                        comments = comment[ccount];
+                        scores = -1;
+                        ccount++;
+                    }
+                    else
+                    {
+                        comments = null;
+                        scores = score[scount];
+                        scount++;
+                    }
+
+                    var surveyResponses = new SurveyResponse { SurveyId = SurveyID, QuestionId = question, ParticipantId = ParticipantID, Score = scores, Comment = comments};
 
                     context.Add(surveyResponses);
                     context.SaveChanges();

@@ -7,25 +7,8 @@
     int F_N = 0;
     int Category = 0;
     List<Question> temp = ViewBag.questions;
-    //int count = 0, temp = 0;
+
 }
-
-<!--{
-    <!--creates a new linking id for the survey questions to the survey
-    If it has already posted once then the id won't be incremented again-->
-    <!--if (count == 0)
-    {
-        foreach (var item in Model)
-        {
-            if (item.SurveyQuestion.Survey.SurveyId > temp)
-            {
-                temp = item.SurveyQuestion.Survey.SurveyId;
-            }
-        }
-
-        temp++;
-    }
-}-->
 
 <h2>NewSurvey</h2>
 
@@ -48,8 +31,6 @@
             @{
                 foreach (var item in temp)
                 {
-                    <!--if (item.SurveyQuestion.Survey.SurveyId == SurveyID)
-                    {-->
                         <tr>
                             <td>
                                 @Html.DisplayFor(modelItem => item.Text)
@@ -75,9 +56,6 @@
                                 }
                             </td>
                         </tr>
-                    <!--}
-                    else
-                    { }-->
                 }
             }
         </tbody>
@@ -88,14 +66,14 @@
             <td>&nbsp;</td>
         </tr>
         <tr align="Center">
-            <td>Please enter your question:<br /><input type="text" asp-for="@Question" /></td>
+            <td>Please enter your question:<br /><input type="text" asp-for="@Question" required/></td>
         </tr>
         <tr>
             <td>&nbsp;</td>
         </tr>
         <tr align="center">
             <td class="radio">
-                <label><input asp-for="@F_N" type="radio" value="0" />Free Text</label>
+                <label><input asp-for="@F_N" type="radio" value="0" required/>Free Text</label>
                 &nbsp;
                 <label><input asp-for="@F_N" type="radio" value="1" />Number Scale</label>
             </td>
@@ -105,7 +83,7 @@
         </tr>
         <tr align="center">
             <td class="radio">
-                <label><input asp-for="@Category" type="radio" value="1" checked/>Communication</label>
+                <label><input asp-for="@Category" type="radio" value="1" required/>Communication</label>
                 &nbsp;
                 <label><input asp-for="@Category" type="radio" value="2" />Collaberation</label>
                 &nbsp;

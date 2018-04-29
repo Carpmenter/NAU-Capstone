@@ -1,14 +1,15 @@
 ﻿
 @{
-    ViewData["Title"] = "Save";
+    ViewData["Title"] = ViewBag.message;
 
-    string name = "";
+    string name = "", person = null;
+    int type = -1;
     DateTime SurveyDate;
 
     SurveyDate = DateTime.Today;
 }
 
-<h2>Save</h2>
+<h2>ViewBag.message</h2>
 
 <form method="POST">
     <table style="width:100%;">
@@ -16,6 +17,22 @@
             <td>Please enter the name for the survey:<br /><input id="text1" type="text" asp-for="@name" /></td>
         </tr>
         <tr>
+            <td>&nbsp;</td>
+        </tr>
+        <tr align="center">
+            <td class="radio">
+                <label><input asp-for="@type" type="radio" value="0" required />Project</label>
+                &nbsp;
+                <label><input asp-for="@type" type="radio" value="1" />Individual</label>
+            </td>
+        </tr>
+        <tr>
+            <td>&nbsp;</td>
+        </tr>
+        <tr align="center" id="temp2">
+            <td>Please enter the name of the person (if applicable):<br /><input id="text1" type="text" asp-for="@person" /></td>
+        </tr>
+        <tr id="temp2">
             <td>&nbsp;</td>
         </tr>
         <tr align="center">

@@ -5,9 +5,7 @@
 }
 
 <h2>Completed Surveys</h2>
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
+
 <table class="table">
     <thead>
         <tr>
@@ -35,7 +33,7 @@
                     @Html.DisplayFor(modelItem => item.CreationDate)
                 </td>
                 <td>
-                    <a asp-action="Admin" asp-route-id="@item.SurveyId">Select</a>
+                    <a aps-controller="Admin" asp-action="emailPage" asp-route-id="@item.SurveyId">Send</a>
                 </td>
             </tr>
         }

@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using NAUReviewApplication.Models;
 using Microsoft.EntityFrameworkCore;
+using MimeKit;
+using MailKit.Net.Smtp;
 
 namespace NAUReviewApplication.Controllers
 {
@@ -35,17 +37,9 @@ namespace NAUReviewApplication.Controllers
 
             SurveyID = getSurveyID();
 
-            //List<int> listOFQuestions = new List<int>();
-
             var questions = getQuestionsBySurvey(SurveyID);
 
             ViewBag.questions = questions;
-
-            /*foreach (var q in questions)
-            {
-                int temp = getQuestions(q.QuestionId, SurveyID);
-                listOFQuestions.Add(temp);
-            }*/
 
             return View(context.Question.ToList());
         }
@@ -57,17 +51,6 @@ namespace NAUReviewApplication.Controllers
                 .Select(sq => sq.Question).ToList();
         }
 
-       /* public int getQuestions(int questID, int survID)
-        {
-            // Selects responses from question questID in survey survID
-            // Then returns average for that response
-            var que = context.SurveyResponse.Where(sr =>
-                 sr.QuestionId == questID &&
-                 sr.SurveyId == survID).ToList();
-
-            return avg.Select(x => x.Score).Average();
-        }*/
-
         public int getSurveyID()
         {
             int temp = 0;
@@ -76,7 +59,6 @@ namespace NAUReviewApplication.Controllers
             {
                 if (item.SurveyId > SurveyID)
                     temp = item.SurveyId;
-                //context.Survey.Where(sp => sp.SurveyId > SurveyID).Select(p => p.SurveyId);
             }
 
             return temp;
@@ -90,10 +72,55 @@ namespace NAUReviewApplication.Controllers
             {
                 if (item.QuestionId > QuestionID)
                     temp = item.QuestionId;
-                //context.Survey.Where(sp => sp.SurveyId > SurveyID).Select(p => p.SurveyId);
             }
 
             return temp;
+        }
+
+        public IActionResult emailPage(int ID)
+        {
+            ViewBag.surveyID = ID;
+            return View();
+        }
+
+        public IActionResult SendEmail(string subject, string body, int surveyID)
+        {
+            string url;
+            string userID = "2";
+            string ID = surveyID.ToString();
+            url = "http://localhost:49404/User/UserPage?id=" + ID + "&part=" + userID;
+
+            var message = new MimeMessage();
+            message.From.Add(new MailboxAddress("murphy2009@hotmail.com"));
+            message.To.Add(new MailboxAddress("alex.c.brown@ndsu.edu")); // Put in for loop for sending multiple emails 
+            try
+            {
+                message.Subject = subject;
+            }
+            catch (Exception ex)
+            {
+                return RedirectToAction(nameof(emailPage));
+            }
+            if (body == "" || body == null)
+            {
+                return RedirectToAction(nameof(emailPage));
+            }
+
+            message.Body = new TextPart("plain")
+            {
+                Text = body + "\n" + url
+            };
+
+            using (var client = new SmtpClient())
+            {
+                client.Connect("smtp.live.com", 587, false);
+                client.Authenticate("murphy2009@hotmail.com", "2Bwealthy");
+                client.Send(message);
+                client.Disconnect(true);
+
+            };
+
+            return RedirectToAction("Index", "Home", new { area = "" });
         }
 
         /* public async Task<IActionResult> Select(int? id)
@@ -142,9 +169,31 @@ namespace NAUReviewApplication.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(string name, DateTime SurveyDate)
+        public IActionResult Create(string name, DateTime SurveyDate, string person, int type)
         {
-            var CreateSurvey = new Survey { Description = name, CreationDate = SurveyDate };
+            string holder;
+
+            if(type == 0)
+            {
+                holder = null;
+            }
+            else
+            {
+                var temp = getPerson(person);
+
+                if (temp == null)
+                {
+                    ViewBag.message = "Person doesn't exist";
+                    return RedirectToAction(nameof(SaveSurveyPage));
+                }
+                else
+                {
+                    holder = temp;
+                }
+
+            }
+
+            var CreateSurvey = new Survey { Description = name, CreationDate = SurveyDate, Recipient = holder };
 
             if (ModelState.IsValid)
             {
@@ -155,6 +204,18 @@ namespace NAUReviewApplication.Controllers
             }
 
             return View(CreateSurvey);
+        }
+
+        public string getPerson(string person)
+        {
+            var temp = context.Participant
+                .Where(p => p.Username == person)
+                .SingleOrDefault();
+
+            if (temp == null)
+                return null;
+            else
+                return temp.ToString();
         }
     }
 }

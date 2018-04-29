@@ -1,68 +1,69 @@
-﻿@model IEnumerable<NAUReviewApplication.Models.Question>
+﻿@model NAUReviewApplication.Models.SurveyResponse
 
 @{
     ViewData["Title"] = "Survey";
 
     int[] score = new int[100];
     string[] comment = new string[100];
-    int[] questionID = new int[100];
-    int counter = 0, questionNum = 1;
+    int scounter = 0, ccounter = 0, questionNum = 1;
     int SurveyID = ViewBag.surveyID;
+    int ParticipantID = ViewBag.participantID;
     List<Question> temp = ViewBag.questions;
 }
 
 <h2>Survey</h2>
 
 <hr />
-        <form method="post">
-            <table class="table">
-                <tbody>
-                    @foreach (var item in temp)
-                    {
-                        <tr>
-                                <td>
-                                @questionNum
-                                </td>
-                                @{questionNum++;}
 
-                                <td>
-                                @Html.DisplayFor(modelItem => item.Text)
-                                </td>
-
-                                @if (item.Type.ToString().Equals("0"))
-                                {
-                                        <td>
-                                        <label><textarea asp-for="@comment[counter]" cols="91" rows="5">Enter Answer Here</textarea></label>
-                                        </td>
-
-                                    score[counter] = -1;// null;
-                                    counter++;
-                                }
-                                else
-                                {
-                                        <td>
-                                            <label><input asp-for="@score[counter]" type="radio" value="1" />Strongly Disagree</label>
-                                            &emsp;&emsp;&emsp;
-                                            <label><input asp-for="@score[counter]" type="radio" value="2" />Disagree</label>
-                                            &emsp;&emsp;&emsp;
-                                            <label><input asp-for="@score[counter]" type="radio" value="3" />Nuetral</label>
-                                            &emsp;&emsp;&emsp;
-                                            <label><input asp-for="@score[counter]" type="radio" value="4" />Agree</label>
-                                            &emsp;&emsp;&emsp;
-                                            <label><input asp-for="@score[counter]" type="radio" value="5" />Strongly Agree</label>
-                                        </td>
-
-                                    comment[counter] = null;
-                                    counter++;
-                                }
-                       </tr>
-                    }
-                    <tr align="right">
+@using (Html.BeginForm("Save", "User", FormMethod.Post))
+{ 
+    <table class="table">
+        <tbody>
+            @foreach (var item in temp)
+            {
+                <tr>
                         <td>
-                            <input type="submit" value="Submit"
-                                   asp-area="" asp-controller="User" asp-action="Save" />
+                        @questionNum
                         </td>
-                    </tr>
-                </tbody>
-            </table>
-        </form>
+                        @{questionNum++;}
+
+                        <td>
+                        @Html.DisplayFor(modelItem => item.Text)
+                        </td>
+
+                        @if (item.Type.ToString().Equals("0"))
+                        {
+                                <td>
+                                <label><textarea asp-for="@comment[ccounter]" cols="91" rows="5">Enter Answer Here</textarea></label>
+                                </td>
+
+                            ccounter++;
+                        }
+                        else
+                        {
+                                <td>
+                                    <label><input asp-for="@score[scounter]" type="radio" value="1" />Strongly Disagree</label>
+                                    &emsp;&emsp;&emsp;
+                                    <label><input asp-for="@score[scounter]" type="radio" value="2" />Disagree</label>
+                                    &emsp;&emsp;&emsp;
+                                    <label><input asp-for="@score[scounter]" type="radio" value="3" />Nuetral</label>
+                                    &emsp;&emsp;&emsp;
+                                    <label><input asp-for="@score[scounter]" type="radio" value="4" />Agree</label>
+                                    &emsp;&emsp;&emsp;
+                                    <label><input asp-for="@score[scounter]" type="radio" value="5" />Strongly Agree</label>
+                                </td>
+
+                            scounter++;
+                        }
+                </tr>
+                }
+            <tr align="right">
+                <td hidden><label hidden><input asp-for="@ParticipantID" value="@ParticipantID" type="radio" checked/></label></td>
+                <td hidden><label hidden><input asp-for="@SurveyID" value="@SurveyID" type="radio" checked /></label></td>
+                <td>
+                    <input type="submit" value="Submit" />
+                </td>
+            </tr>
+        </tbody>
+    </table>
+}
