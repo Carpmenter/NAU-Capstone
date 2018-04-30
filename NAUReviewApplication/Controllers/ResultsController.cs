@@ -37,7 +37,7 @@ namespace NAUReviewApplication.Controllers
             var survey = context.Survey.Single(s => s.SurveyId == surveyID);
             List<double> averages = new List<double>();
             List<SurveyResponse> recipientResponses = new List<SurveyResponse>();
-
+            var groupScores = new List<Tuple<ICollection<Group>, List<double>>>();
             // Get list of questions corresponding to SurveyID 
             var questions = getQuestionsBySurvey(surveyID);
 
@@ -54,6 +54,7 @@ namespace NAUReviewApplication.Controllers
                 }
                 else
                 {
+                    groupScores.Add(getAverageByGroup(q.QuestionId, surveyID));
                     temp = getAvgResponses(q.QuestionId, surveyID);
                     averages.Add(temp);
                 }
@@ -65,6 +66,7 @@ namespace NAUReviewApplication.Controllers
                 ViewBag.RecipAnswers = recipientResponses;
             }
 
+            ViewBag.GroupAvgs = groupScores;
             ViewBag.Comments = getComments(surveyID);
             ViewBag.Groups = getSurveyGroups(surveyID);
             ViewBag.Questions = getQuestionsBySurvey(surveyID);
@@ -177,23 +179,40 @@ namespace NAUReviewApplication.Controllers
             return groups;
         }
         
-        public Tuple<List<Group>, List<double>> getAverageByGroup(int questID, int survID)
+        public Tuple<ICollection<Group>, List<double>> getAverageByGroup(int questID, int survID)
         {
             var responses = context.SurveyResponse.Where(sr =>
                  sr.QuestionId == questID &&
                  sr.SurveyId == survID).ToList();
 
-            var surveyGroups = getSurveyGroups(survID);
+            var groupScore = new List<Tuple<int, int>>();
             List<double> avgs = new List<double>();
-            List<Group> groups = new List<Group>();
+            var groups = getSurveyGroups(survID);
 
             foreach(var r in responses)
             {
-                var pGroup = context.Participant.Where(p => p.ParticipantId == r.ParticipantId)
-                    .Select(p => p.GroupId);
-                var group = context.Group.Where(g => g.GroupId == Convert.ToInt32(pGroup));
+                var GID = context.Participant.Where(p => p.ParticipantId == r.ParticipantId)
+                    .Select(p => p.GroupId).Single();
                 int score = r.Score;
+                groupScore.Add(Tuple.Create(GID, score));
             }
+
+            for (int i=0; i< groups.Count; i++)
+            {
+                int count = 0;
+                int score =0;
+                int temp = groups.ElementAt(i).GroupId;
+                foreach (var gs in groupScore)
+                {
+                    if (gs.Item1 == temp)
+                    {
+                        score += gs.Item2;
+                        count++;
+                    }
+                }
+                avgs.Add(score / count);
+            }
+
             return Tuple.Create(groups, avgs);
         }
 

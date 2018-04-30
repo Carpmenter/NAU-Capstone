@@ -11,6 +11,7 @@
     Survey survey = ViewBag.Survey;
     Participant recipient = ViewBag.Recipient;
     List<SurveyResponse> recipientAnswers = ViewBag.RecipAnswers;
+    List<Tuple<ICollection<Group>, List<double>>> groupAvgs = ViewBag.GroupAvgs;
 }
 
 <!DOCTYPE html>
@@ -80,12 +81,12 @@
                                 @recipientAnswers.ElementAt(i).Score
                             }
                         </td>
-                    } else if (survey.Type == 0)
-                    {
-                        foreach (var g in groups)
+                        } else if (survey.Type == 0)
+                        {
+                            for (int j=0; j < groups.Count(); j++)
                         {
                             <td>
-                                group average
+                                @groupAvgs.ElementAt(i).Item2.ElementAt(j)
                             </td>
 
                         }
