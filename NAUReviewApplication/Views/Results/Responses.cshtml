@@ -86,7 +86,13 @@
                             for (int j=0; j < groups.Count(); j++)
                         {
                             <td>
-                                @groupAvgs.ElementAt(i).Item2.ElementAt(j)
+                                @if (groupAvgs.ElementAt(i).Item2.ElementAt(j).ToString().Equals("-1"))
+                                {
+                                       @Html.DisplayName("N/A")
+                                }else
+                                {
+                                    @groupAvgs.ElementAt(i).Item2.ElementAt(j)
+                                }
                             </td>
 
                         }
@@ -99,6 +105,7 @@
             }
         </tbody>
     </table>
+    <p align="center">(1) Strongly Disagree  &nbsp;  (2) Disagree  &nbsp;  (3) Neutral  &nbsp;  (4) Agree  &nbsp;  (5) Strongly Agree</p>
     <table class="table">
         <thead>
             <tr>

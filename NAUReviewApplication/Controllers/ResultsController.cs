@@ -210,7 +210,8 @@ namespace NAUReviewApplication.Controllers
                         count++;
                     }
                 }
-                avgs.Add(score / count);
+                double avg = score / count;
+                avgs.Add(Math.Round(avg, 2));
             }
 
             return Tuple.Create(groups, avgs);
