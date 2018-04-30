@@ -1,23 +1,42 @@
-﻿@{
+﻿@using NAUReviewApplication.Models;
+@{
+    ViewData["Title"] = "Contact";
     Layout = "_Layout";
     string subject = "";
     string body = "";
+    int participant = -1;
+    List<Participant> partslist = new List<Participant>();
+    if (ViewBag.set != null)
+    {
+        partslist = ViewBag.set;
+    }
+
     int surveyID = ViewBag.surveyID;
 }
 <h2>@ViewData["Title"]</h2>
-<h3>@ViewData["Message"]</h3>
+<h3></h3>
 
 
 <div class=" panel panel-body" style=" min-height:300px">
 
 
     <form method="POST">
-        <h3>@ViewData["Message"]</h3>
-        <div id="Login" class="btn-block" style="text-align:center" ;>
+        <div class="btn-block" style="text-align:center" ;>
             <fieldset>
                 <legend class="label">Send Email</legend>
                 <table>
                     <tbody>
+                        <tr>
+                            <td>
+                                <label>Username</label><label hidden><input asp-for="@surveyID" value="@surveyID" type="radio" checked /></label>
+                            </td>
+                            <td>
+                                <select asp-for="@participant" asp-items="@(new SelectList(ViewBag.listofparts,"ParticipantId", "Username"))"></select>
+                            </td>
+                            <td>
+                                <input type="submit" value="Add Recipient" asp-controller="Admin" asp-action="addName" />
+                            </td>
+                        </tr>
                         <tr>
                             <td>
                                 <span class="label label-primary">Subject</span>
@@ -33,6 +52,27 @@
                             <td>
                                 <textarea asp-for="@body" id="Body" type="text" name="Body" cols="74" rows="10"></textarea>
                             </td>
+                            <td>
+                                <table>
+                                    <thead>
+                                        Recipients
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var item in partslist)
+                                        {
+                                            <tr>
+                                                <td>
+                                                    @item.Username
+                                                </td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </td>
+                            <td>
+                                <input type="submit" value="Remove most receint recipient"
+                                       asp-area="" asp-controller="Admin" asp-action="removeName" />
+                            </td>
                         </tr>
                         <tr>
                             <td></td>
@@ -46,9 +86,8 @@
                 <h4>Link will be added to the end of the email</h4>
 
             </fieldset>
-
-            <label hidden><input asp-for="@surveyID" value="@surveyID" type="radio" checked /></label>
         </div>
+        <!--<div><label hidden><input asp-for="@surveyID" value="@surveyID" type="radio" checked /></label></div>-->
     </form>
 
 

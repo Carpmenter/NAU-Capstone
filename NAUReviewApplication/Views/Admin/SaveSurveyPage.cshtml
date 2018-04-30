@@ -2,14 +2,14 @@
 @{
     ViewData["Title"] = ViewBag.message;
 
-    string name = "", person = null;
+    string name = "", person = null, message = ViewBag.message;
     int type = -1;
     DateTime SurveyDate;
 
     SurveyDate = DateTime.Today;
 }
 
-<h2>ViewBag.message</h2>
+<h2>@message</h2>
 
 <form method="POST">
     <table style="width:100%;">

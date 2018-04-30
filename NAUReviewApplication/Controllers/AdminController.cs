@@ -13,8 +13,9 @@ namespace NAUReviewApplication.Controllers
     public class AdminController : Controller
     {
         private NAUcountryContext context;
-        private int SurveyID;
+        private static int SurveyID;
         private int QuestionID;
+        public static List<Participant> selectedparts = new List<Participant>();
 
         public AdminController(NAUcountryContext context)
         {
@@ -77,50 +78,94 @@ namespace NAUReviewApplication.Controllers
             return temp;
         }
 
+        public IActionResult removeName(int surveyID)
+        {
+            int ID = surveyID;
+            int count = selectedparts.Count();
+            selectedparts.RemoveAt(count - 1);
+            return RedirectToAction("emailPage", new { ID });
+        }
+
+        public IActionResult addName(int participant, int surveyID)
+        {
+            int ID = surveyID;
+            foreach (Participant item in context.Participant)
+            {
+                if (item.ParticipantId == participant)
+                {
+                    selectedparts.Add(item);
+                }
+            }
+            return RedirectToAction("emailPage", new { ID });
+        }
+
         public IActionResult emailPage(int ID)
         {
             ViewBag.surveyID = ID;
+            List<Participant> list = new List<Participant>();
+            list = context.Participant.ToList();
+            ViewBag.listofparts = list;
+            ViewBag.set = selectedparts;
             return View();
         }
 
         public IActionResult SendEmail(string subject, string body, int surveyID)
         {
             string url;
-            string userID = "2";
+            string userID = "";
+            string email = "";
             string ID = surveyID.ToString();
-            url = "http://localhost:49404/User/UserPage?id=" + ID + "&part=" + userID;
-
             var message = new MimeMessage();
             message.From.Add(new MailboxAddress("murphy2009@hotmail.com"));
-            message.To.Add(new MailboxAddress("alex.c.brown@ndsu.edu")); // Put in for loop for sending multiple emails 
-            try
-            {
-                message.Subject = subject;
-            }
-            catch (Exception ex)
-            {
-                return RedirectToAction(nameof(emailPage));
-            }
-            if (body == "" || body == null)
+
+            if (selectedparts.Count == 0)
             {
                 return RedirectToAction(nameof(emailPage));
             }
 
-            message.Body = new TextPart("plain")
+            foreach (var item in selectedparts)
             {
-                Text = body + "\n" + url
-            };
+                userID = item.ParticipantId.ToString();
+                email = item.Username;
 
-            using (var client = new SmtpClient())
-            {
-                client.Connect("smtp.live.com", 587, false);
-                client.Authenticate("murphy2009@hotmail.com", "2Bwealthy");
-                client.Send(message);
-                client.Disconnect(true);
+                if (message.To.Count > 0)
+                {
+                    message.To.RemoveAt(0);
+                }
 
-            };
+                message.To.Add(new MailboxAddress(email));
 
-            return RedirectToAction("Index", "Home", new { area = "" });
+                url = "http://localhost:49404/User/UserPage?id=" + ID + "&part=" + userID;
+
+                try
+                {
+                    message.Subject = subject;
+                }
+                catch (Exception ex)
+                {
+                    return RedirectToAction(nameof(emailPage));
+                }
+                if (body == "" || body == null)
+                {
+                    return RedirectToAction(nameof(emailPage));
+                }
+
+                message.Body = new TextPart("plain")
+                {
+                    Text = body + "\n" + url
+                };
+
+                using (var client = new SmtpClient())
+                {
+                    client.Connect("smtp.live.com", 587, false);
+                    client.Authenticate("murphy2009@hotmail.com", "2Bwealthy");
+                    client.Send(message);
+                    client.Disconnect(true);
+
+                };
+            }
+
+            return RedirectToAction("Index", "Home");
         }
 
         /* public async Task<IActionResult> Select(int? id)
@@ -187,7 +232,6 @@ namespace NAUReviewApplication.Controllers
 
                 if (temp == null)
                 {
-                    ViewBag.message = "Person doesn't exist";
                     return RedirectToAction(nameof(SaveSurveyPage));
                 }
                 else
