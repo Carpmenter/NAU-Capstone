@@ -56,7 +56,7 @@ namespace NAUReviewApplication.Controllers
         public IActionResult Save(int[] score, string[] comment, int SurveyID, int ParticipantID)
         {
             int scores,question,scount = 0, ccount = 0; 
-            var questions = getQuestionsBySurvey(1);
+            var questions = getQuestionsBySurvey(SurveyID);
             string comments;
 
             if (ModelState.IsValid)

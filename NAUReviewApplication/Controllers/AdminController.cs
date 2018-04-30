@@ -13,7 +13,7 @@ namespace NAUReviewApplication.Controllers
     public class AdminController : Controller
     {
         private NAUcountryContext context;
-        private static int SurveyID;
+        private int SurveyID;
         private int QuestionID;
         public static List<Participant> selectedparts = new List<Participant>();
 

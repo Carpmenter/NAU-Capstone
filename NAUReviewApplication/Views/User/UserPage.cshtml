@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = "Survey";
+    Layout = "~/Views/Shared/_Layout3.cshtml";
 
     int[] score = new int[100];
     string[] comment = new string[100];
@@ -34,7 +35,7 @@
                         @if (item.Type.ToString().Equals("0"))
                         {
                                 <td>
-                                <label><textarea asp-for="@comment[ccounter]" cols="91" rows="5">Enter Answer Here</textarea></label>
+                                <label><textarea asp-for="@comment[ccounter]" cols="91" rows="5" required>Enter Answer Here</textarea></label>
                                 </td>
 
                             ccounter++;
@@ -42,7 +43,7 @@
                         else
                         {
                                 <td>
-                                    <label><input asp-for="@score[scounter]" type="radio" value="1" />Strongly Disagree</label>
+                                    <label><input asp-for="@score[scounter]" type="radio" value="1" required/>Strongly Disagree</label>
                                     &emsp;&emsp;&emsp;
                                     <label><input asp-for="@score[scounter]" type="radio" value="2" />Disagree</label>
                                     &emsp;&emsp;&emsp;
