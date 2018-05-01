@@ -114,13 +114,14 @@ namespace NAUReviewApplication.Controllers
             string url;
             string userID = "";
             string email = "";
-            string ID = surveyID.ToString();
+            int ID = surveyID;
+            string servID = surveyID.ToString();
             var message = new MimeMessage();
             message.From.Add(new MailboxAddress("murphy2009@hotmail.com"));
 
             if (selectedparts.Count == 0)
             {
-                return RedirectToAction(nameof(emailPage));
+                return RedirectToAction("emailPage", new { ID });
             }
 
             foreach (var item in selectedparts)
@@ -135,7 +136,7 @@ namespace NAUReviewApplication.Controllers
 
                 message.To.Add(new MailboxAddress(email));
 
-                url = "http://localhost:49404/User/UserPage?id=" + ID + "&part=" + userID;
+                url = "http://localhost:49404/User/UserPage?id=" + servID + "&part=" + userID;
 
                 try
                 {
@@ -143,11 +144,11 @@ namespace NAUReviewApplication.Controllers
                 }
                 catch (Exception ex)
                 {
-                    return RedirectToAction(nameof(emailPage));
+                    return RedirectToAction("emailPage", new { ID });
                 }
                 if (body == "" || body == null)
                 {
-                    return RedirectToAction(nameof(emailPage));
+                    return RedirectToAction("emailPage", new { ID });
                 }
 
                 message.Body = new TextPart("plain")

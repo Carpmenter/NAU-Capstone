@@ -28,7 +28,7 @@ namespace NAUReviewApplication.Controllers
 
             SurveyID = Convert.ToInt32(id);
             ParticipantID = Convert.ToInt32(part);
-
+            ViewBag.SurveyName = context.Survey.Where(x => x.SurveyId == SurveyID).Select(x => x.Description).Single();
             ViewBag.surveyID = SurveyID;
             ViewBag.participantID = ParticipantID;
 
